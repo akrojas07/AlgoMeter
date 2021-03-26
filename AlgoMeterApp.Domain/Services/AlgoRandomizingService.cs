@@ -37,7 +37,7 @@ namespace AlgoMeterApp.Domain.Services
             //select random number from the questionBank size
             Random rand = new Random();
 
-            _randomQuestionNumber = rand.Next(0, questionBankSize);
+            _randomQuestionNumber = rand.Next(1, questionBankSize);
 
         }
 

@@ -6,7 +6,8 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Entities
 {
     public class AlgoQuestions
     {
-        public string Question { get; set; }
-        public string Examples { get; set; }
+        public long QuestionId { get; }
+        public string Question { get; }
+        public string Examples { get; }
     }
 }

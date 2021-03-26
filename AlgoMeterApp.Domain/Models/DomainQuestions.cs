@@ -6,7 +6,15 @@ namespace AlgoMeterApp.Domain.Models
 {
     public class DomainQuestions
     {
-        public string Question { get; set; }
-        public string Examples { get; set; }
+        public long QuestionId { get; }
+        public string Question { get; }
+        public string Examples { get; }
+    }
+
+    public class Examples 
+    {
+        public string Input { get; }
+        public string Output { get; }
+        public string Explanation { get; }
     }
 }
