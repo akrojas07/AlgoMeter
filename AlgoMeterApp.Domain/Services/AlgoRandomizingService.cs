@@ -42,7 +42,7 @@ namespace AlgoMeterApp.Domain.Services
         /// Uses randomized number returned by RandomizeQuestion Method
         /// </summary>
         /// <returns>Task of type Question</returns>
-        public async Task GetRandomizedQuestion(long userId)
+        public async Task<DomainQuestions> GetRandomizedQuestion(long userId)
         {
             //pull question bank size information
             var questionBankSize = await _algoRepo.GetQuestionBankSize();
@@ -50,7 +50,7 @@ namespace AlgoMeterApp.Domain.Services
             //validate data from db
             if (questionBankSize <= 0)
             {
-                return;
+                return null;
             }
 
             //call user service to pull questions 
@@ -64,11 +64,11 @@ namespace AlgoMeterApp.Domain.Services
             //call service to pull question based on question id
             var randomizedQuestion = await _algoRepo.GetRandomizedQuestion(_randomQuestionNumber);
 
-
             //map to domain question
+            DomainQuestions domainRandomizedQuestion = Mapper.QuestionMapper.RepoToDomainQuestion(randomizedQuestion);
 
             //return domain question
-            throw new NotImplementedException();
+            return domainRandomizedQuestion;
         }
 
 

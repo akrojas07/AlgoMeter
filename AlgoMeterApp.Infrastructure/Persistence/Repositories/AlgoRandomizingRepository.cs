@@ -22,19 +22,19 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Repositories
         public async Task<long> GetQuestionBankSize()
         {
             //pull list of questions from db
-            var questionList = _mongoDatabase.GetCollection<AlgoQuestions>("AlgoQuestions");
+            var questionList = _mongoDatabase.GetCollection<RepoQuestions>("AlgoQuestions");
 
             //return count of questions
             return await questionList.CountDocumentsAsync(new BsonDocument());
         }
 
-        public async Task<AlgoQuestions> GetRandomizedQuestion(long questionNumber)
+        public async Task<RepoQuestions> GetRandomizedQuestion(long questionNumber)
         {
             //pull collection of questions from db
-            var questionCollection = _mongoDatabase.GetCollection<AlgoQuestions>("AlgoQuestions");
+            var questionCollection = _mongoDatabase.GetCollection<RepoQuestions>("AlgoQuestions");
 
             //filter questions collection by question id  
-            var filter = Builders<AlgoQuestions>.Filter.Eq("question_id", questionNumber);
+            var filter = Builders<RepoQuestions>.Filter.Eq("question_id", questionNumber);
 
             //set questionDocument to the first instance of question_id = question number
             var questionDocument = await questionCollection.Find(filter).FirstOrDefaultAsync();

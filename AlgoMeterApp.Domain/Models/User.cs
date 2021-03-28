@@ -6,7 +6,7 @@ namespace AlgoMeterApp.Domain.Models
 {
     public class User
     {
-        public long Id { get; set;}
+        public Guid Id { get; set;}
         public List<long> QuestionIds { get; set; }
     }
 }

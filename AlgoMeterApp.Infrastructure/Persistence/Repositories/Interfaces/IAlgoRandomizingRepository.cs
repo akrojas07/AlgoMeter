@@ -9,7 +9,7 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces
 {
     public interface IAlgoRandomizingRepository
     {
-        Task<AlgoQuestions> GetRandomizedQuestion(long questionNumber);
+        Task<RepoQuestions> GetRandomizedQuestion(long questionNumber);
         Task<long> GetQuestionBankSize();
     }
 }

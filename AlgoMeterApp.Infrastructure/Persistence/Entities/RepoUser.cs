@@ -4,9 +4,9 @@ using System.Text;
 
 namespace AlgoMeterApp.Infrastructure.Persistence.Entities
 {
-    public class AlgoUser
+    public class RepoUser
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public List<long> QuestionIds { get; set; }
     }
 }
