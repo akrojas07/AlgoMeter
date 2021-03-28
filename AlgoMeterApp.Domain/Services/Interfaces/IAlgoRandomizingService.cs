@@ -7,7 +7,6 @@ namespace AlgoMeterApp.Domain.Services.Interfaces
 {
     public interface IAlgoRandomizingService
     {
-        Task RandomizeQuestion();
-        Task GetRandomizedQuestion();
+        Task GetRandomizedQuestion(long userId);
     }
 }

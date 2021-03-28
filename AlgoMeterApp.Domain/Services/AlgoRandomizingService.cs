@@ -1,4 +1,5 @@
-﻿using AlgoMeterApp.Domain.Services.Interfaces;
+﻿using AlgoMeterApp.Domain.Models;
+using AlgoMeterApp.Domain.Services.Interfaces;
 using AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AlgoMeterApp.Domain.Services
     public class AlgoRandomizingService : IAlgoRandomizingService
     {
         private readonly IAlgoRandomizingRepository _algoRepo;
-        private static int _randomQuestionNumber; 
+        private static long _randomQuestionNumber; 
         public AlgoRandomizingService(IAlgoRandomizingRepository algoRepo) 
         {
             _algoRepo = algoRepo;
@@ -23,21 +24,16 @@ namespace AlgoMeterApp.Domain.Services
         /// Loops through numbers 1 to n (equivalent to the number of questions available in the question bank)
         /// </summary>
         /// <returns>randomized question number</returns>
-        public async Task RandomizeQuestion()
+        private void RandomizeQuestion(List<long> seenQuestions, long questionBankSize)
         {
-            //pull question bank size information
-            var questionBankSize = await _algoRepo.GetQuestionBankSize(); 
-
-            //validate data from db
-            if(questionBankSize <= 0)
-            {
-                return;
-            }
-
             //select random number from the questionBank size
             Random rand = new Random();
 
-            _randomQuestionNumber = rand.Next(1, questionBankSize);
+            do
+            {
+                _randomQuestionNumber = rand.Next(1, (int)questionBankSize);
+            } 
+            while (!seenQuestions.Contains(_randomQuestionNumber));
 
         }
 
@@ -46,8 +42,32 @@ namespace AlgoMeterApp.Domain.Services
         /// Uses randomized number returned by RandomizeQuestion Method
         /// </summary>
         /// <returns>Task of type Question</returns>
-        public Task GetRandomizedQuestion()
+        public async Task GetRandomizedQuestion(long userId)
         {
+            //pull question bank size information
+            var questionBankSize = await _algoRepo.GetQuestionBankSize();
+
+            //validate data from db
+            if (questionBankSize <= 0)
+            {
+                return;
+            }
+
+            //call user service to pull questions 
+
+            //return if seen question list == length of question bank size
+            List<long> seenQuestions = new List<long>();
+
+            //pass them into randomize question 
+            RandomizeQuestion(seenQuestions, questionBankSize);
+
+            //call service to pull question based on question id
+            var randomizedQuestion = await _algoRepo.GetRandomizedQuestion(_randomQuestionNumber);
+
+
+            //map to domain question
+
+            //return domain question
             throw new NotImplementedException();
         }
 
