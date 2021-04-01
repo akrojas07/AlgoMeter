@@ -1,5 +1,6 @@
 ﻿using AlgoMeterApp.Domain.Models;
 using AlgoMeterApp.Domain.Services.Interfaces;
+using AlgoMeterApp.Infrastructure.Persistence.Entities;
 using AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces;
 using MongoDB.Driver;
 using System;
@@ -17,20 +18,23 @@ namespace AlgoMeterApp.Domain.Services
         {
             _userRepository = userRepository;
         }
-        public async Task CreateNewUser(User newUser)
+        public async Task<string> CreateNewUser()
         {
-            if(newUser == null)
+            string newUserId = Guid.NewGuid().ToString();
+            
+            //convert to dbuser and add new user guid
+            var dbUser = new RepoUser()
             {
-                return;
-            }
-            //map domain user to db user
-            var dbUser = Mapper.UserMapper.DomainToDbUser(newUser);
+                UserId = newUserId,
+                QuestionIds = new List<long>()
+            }; 
 
             await _userRepository.CreateNewUser(dbUser);
 
+            return newUserId;
         }
 
-        public async Task DeleteExistingUser(Guid userId)
+        public async Task DeleteExistingUser(string userId)
         {
             if(userId == null)
             {

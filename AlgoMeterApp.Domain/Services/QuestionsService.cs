@@ -1,5 +1,6 @@
 ﻿using AlgoMeterApp.Domain.Models;
 using AlgoMeterApp.Domain.Services.Interfaces;
+using AlgoMeterApp.Infrastructure.Persistence.Entities;
 using AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace AlgoMeterApp.Domain.Services
 {
-    public class AlgoRandomizingService : IAlgoRandomizingService
+    public class QuestionsService : IQuestionsService
     {
-        private readonly IAlgoRandomizingRepository _algoRepo;
+        private readonly IQuestionsRepository _algoRepo;
+        private readonly IUserRepository _userRepository;
         private static long _randomQuestionNumber; 
-        public AlgoRandomizingService(IAlgoRandomizingRepository algoRepo) 
+        public QuestionsService(IQuestionsRepository algoRepo, IUserRepository userRepository) 
         {
             _algoRepo = algoRepo;
             _randomQuestionNumber = 0;
+            _userRepository = userRepository;
         }
 
 
@@ -33,7 +36,7 @@ namespace AlgoMeterApp.Domain.Services
             {
                 _randomQuestionNumber = rand.Next(1, (int)questionBankSize);
             } 
-            while (!seenQuestions.Contains(_randomQuestionNumber));
+            while (seenQuestions.Contains(_randomQuestionNumber));
 
         }
 
@@ -42,7 +45,7 @@ namespace AlgoMeterApp.Domain.Services
         /// Uses randomized number returned by RandomizeQuestion Method
         /// </summary>
         /// <returns>Task of type Question</returns>
-        public async Task<DomainQuestions> GetRandomizedQuestion(long userId)
+        public async Task<DomainQuestions> GetRandomizedQuestion(string userId)
         {
             //pull question bank size information
             var questionBankSize = await _algoRepo.GetQuestionBankSize();
@@ -53,10 +56,15 @@ namespace AlgoMeterApp.Domain.Services
                 return null;
             }
 
-            //call user service to pull questions 
+            //call user service to pull list of seen questions 
+            var userDetails = await _userRepository.GetUserDetails(userId);
+            var seenQuestions = userDetails.QuestionIds;
 
             //return if seen question list == length of question bank size
-            List<long> seenQuestions = new List<long>();
+            if(seenQuestions.Count == questionBankSize)
+            {
+                return new DomainQuestions("Reached end of question set");
+            }
 
             //pass them into randomize question 
             RandomizeQuestion(seenQuestions, questionBankSize);
@@ -71,6 +79,19 @@ namespace AlgoMeterApp.Domain.Services
             return domainRandomizedQuestion;
         }
 
+        //Service method to add questions to the database
+        public async Task AddQuestions(List<DomainQuestions> questionList)
+        {
+            //map domain question list to db question list 
+            var dbQuestionList = new List<RepoQuestions>();
 
+            foreach(var q in questionList)
+            {
+                dbQuestionList.Add(Mapper.QuestionMapper.DomainToRepoQuestion(q));
+            }
+
+            await _algoRepo.AddQuestions(dbQuestionList); 
+
+        }
     }
 }

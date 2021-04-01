@@ -21,20 +21,34 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Repositories
             //pull user collection from db
             var userCollection = _mongoDatabase.GetCollection<RepoUser>("AlgoUserToQuestions");
 
-            //add new user user to collection
+            //add new user to collection
             await userCollection.InsertOneAsync(newUser);
         }
 
-        public async Task DeleteExistingUser(Guid userId)
+        public async Task DeleteExistingUser(string userId)
         {
             //pull user collection from db
             var userCollection = _mongoDatabase.GetCollection<RepoUser>("AlgoUserToQuestions");
 
             //define a filter for which user document to delete
-            var deleteFilter = Builders<RepoUser>.Filter.Eq("user_id", userId);
+            var deleteFilter = Builders<RepoUser>.Filter.Eq("UserId", userId);
 
             //pass the delete filter into the Delete One method
             await userCollection.DeleteOneAsync(deleteFilter);
+        }
+
+        public async Task<RepoUser> GetUserDetails(string userId)
+        {
+            //pull collection of users from db
+            var userCollection = _mongoDatabase.GetCollection<RepoUser>("AlgoUserToQuestions");
+
+            //filter data down to the sepcific user document
+            var filter = Builders<RepoUser>.Filter.Eq("UserId", userId);
+
+            //filter collection down to document that matches filter
+            var userDocument = await userCollection.Find(filter).FirstOrDefaultAsync();
+
+            return userDocument; 
         }
 
         public async Task UpdateExistingUserQuestionList(RepoUser repoUser)
@@ -43,10 +57,10 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Repositories
             var userCollection = _mongoDatabase.GetCollection<RepoUser>("AlgoUserToQuestions");
 
             //filter data down to specific document where userid is equal to argument
-            var filter = Builders<RepoUser>.Filter.Eq("user_id", repoUser.Id);
+            var filter = Builders<RepoUser>.Filter.Eq("UserId", repoUser.UserId);
 
             //set data to be changed 
-            var update = Builders<RepoUser>.Update.Set("question_list", repoUser.QuestionIds);
+            var update = Builders<RepoUser>.Update.Set("QuestionIds", repoUser.QuestionIds);
 
             //update selected data
             await userCollection.UpdateOneAsync(filter, update);

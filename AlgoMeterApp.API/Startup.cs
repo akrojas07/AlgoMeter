@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AlgoMeterApp.Domain.Services;
+using AlgoMeterApp.Domain.Services.Interfaces;
+using AlgoMeterApp.Infrastructure.Persistence.Repositories;
+using AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +29,9 @@ namespace AlgoMeterApp.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddCors();
+
             var connectionString = Configuration.GetSection("ConnectionStrings:AlgoMeterDb").Value;
             var dbName = Configuration.GetSection("DatabaseName:AlgoMeter").Value;
             
@@ -32,7 +39,11 @@ namespace AlgoMeterApp.API
             var database = client.GetDatabase(dbName);
 
             services.AddSingleton<IMongoDatabase>(database);
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IQuestionsRepository, QuestionsRepository>();
 
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IQuestionsService, QuestionsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,13 +55,11 @@ namespace AlgoMeterApp.API
             }
 
             app.UseRouting();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }

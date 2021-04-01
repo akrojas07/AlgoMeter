@@ -8,8 +8,8 @@ namespace AlgoMeterApp.Domain.Services.Interfaces
 {
     public interface IUserService
     {
-        Task CreateNewUser(User newUser);
+        Task<string> CreateNewUser();
         Task UpdateExistingUserQuestionList(User existingUser);
-        Task DeleteExistingUser(Guid userId); 
+        Task DeleteExistingUser(string userId); 
     }
 }

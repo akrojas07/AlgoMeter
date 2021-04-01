@@ -10,6 +10,7 @@ namespace AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces
     {
         Task CreateNewUser(RepoUser repoUser);
         Task UpdateExistingUserQuestionList(RepoUser repoUser);
-        Task DeleteExistingUser(Guid userId);
+        Task DeleteExistingUser(string userId);
+        Task<RepoUser> GetUserDetails(string userId);
     }
 }

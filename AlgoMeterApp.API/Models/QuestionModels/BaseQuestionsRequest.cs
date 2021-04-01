@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace AlgoMeterApp.Infrastructure.Persistence.Entities
+namespace AlgoMeterApp.API.Models.QuestionModels
 {
-    public class RepoQuestions
+    public class BaseQuestionsRequest
     {
-        public BsonObjectId _id { get; set; }
         public long QuestionId { get; set; }
         public string Question { get; set; }
         public string Input { get; set; }
         public string Output { get; set; }
-        
     }
+
+
 }

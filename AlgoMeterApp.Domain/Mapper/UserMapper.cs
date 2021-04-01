@@ -11,7 +11,7 @@ namespace AlgoMeterApp.Domain.Mapper
         public static DomainUser DbToDomainUser(DbUser dbUser)
         {
             DomainUser domainUser = new DomainUser();
-            domainUser.Id = dbUser.Id;
+            domainUser.UserId = dbUser.UserId;
 
             domainUser.QuestionIds = dbUser.QuestionIds;
 
@@ -22,8 +22,8 @@ namespace AlgoMeterApp.Domain.Mapper
         {
             DbUser dbUser = new DbUser();
 
-            dbUser.Id = domainUser.Id;
-            dbUser.QuestionIds = dbUser.QuestionIds;
+            dbUser.UserId = domainUser.UserId;
+            dbUser.QuestionIds = domainUser.QuestionIds;
 
             return dbUser;
 

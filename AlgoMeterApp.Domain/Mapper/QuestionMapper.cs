@@ -15,9 +15,9 @@ namespace AlgoMeterApp.Domain.Mapper
 
             domainQuestion.QuestionId = repoQuestion.QuestionId;
             domainQuestion.Question = repoQuestion.Question;
-            domainQuestion.Example.Input = repoQuestion.Example.Input;
-            domainQuestion.Example.Output = repoQuestion.Example.Output;
-            domainQuestion.Example.Explanation = repoQuestion.Example.Explanation;
+            domainQuestion.Input = repoQuestion.Input;
+            domainQuestion.Output = repoQuestion.Output;
+
 
             return domainQuestion;
         }
@@ -28,9 +28,8 @@ namespace AlgoMeterApp.Domain.Mapper
             
             repoQuestion.QuestionId = domainQuestion.QuestionId;
             repoQuestion.Question = domainQuestion.Question;
-            repoQuestion.Example.Input = domainQuestion.Example.Input;
-            repoQuestion.Example.Output = domainQuestion.Example.Output;
-            repoQuestion.Example.Explanation = domainQuestion.Example.Explanation;
+            repoQuestion.Input = domainQuestion.Input;
+            repoQuestion.Output = domainQuestion.Output;
 
             return repoQuestion;
         }

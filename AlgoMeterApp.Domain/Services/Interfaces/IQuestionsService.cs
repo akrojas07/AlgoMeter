@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace AlgoMeterApp.Domain.Services.Interfaces
 {
-    public interface IAlgoRandomizingService
+    public interface IQuestionsService
     {
-        Task<DomainQuestions> GetRandomizedQuestion(long userId);
+        Task AddQuestions(List<DomainQuestions> questionList);
+        Task<DomainQuestions> GetRandomizedQuestion(string userId);
     }
 }

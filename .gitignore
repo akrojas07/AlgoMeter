@@ -10,3 +10,5 @@ AlgoMeterApp.Infrastructure/obj/
 AlgoMeterApp.API/bin/
 
 AlgoMeterApp.Infrastructure/bin/
+
+AlgoMeterApp.Domain/bin/
