@@ -7,9 +7,10 @@ using AlgoMeterApp.Infrastructure.Persistence.Entities;
 
 namespace AlgoMeterApp.Infrastructure.Persistence.Repositories.Interfaces
 {
-    public interface IAlgoRandomizingRepository
+    public interface IQuestionsRepository
     {
-        Task<AlgoQuestions> GetRandomizedQuestion(int questionNumber);
-        Task<int> GetQuestionBankSize();
+        Task AddQuestions(List<RepoQuestions> questionList);
+        Task<RepoQuestions> GetRandomizedQuestion(long questionNumber);
+        Task<long> GetQuestionBankSize();
     }
 }
