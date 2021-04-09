@@ -38,7 +38,7 @@ namespace AlgoMeterApp.Domain.Services
         {
             if(userId == null)
             {
-                return;
+                throw new ArgumentException();
             }
             await _userRepository.DeleteExistingUser(userId);
         }
@@ -47,7 +47,7 @@ namespace AlgoMeterApp.Domain.Services
         {
             if(existingUser == null)
             {
-                return;
+                throw new ArgumentException() ;
             }
             //map domain user and question list to repo user and question list
             var dbUser = Mapper.UserMapper.DomainToDbUser(existingUser);
