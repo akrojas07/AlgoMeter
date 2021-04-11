@@ -34,10 +34,9 @@ namespace AlgoMeterApp.Domain.Services
 
             do
             {
-                _randomQuestionNumber = rand.Next(1, (int)questionBankSize);
+                _randomQuestionNumber = rand.Next(1, (int)questionBankSize + 1);
             } 
             while (seenQuestions.Contains(_randomQuestionNumber));
-
         }
 
         /// <summary>
@@ -47,13 +46,19 @@ namespace AlgoMeterApp.Domain.Services
         /// <returns>Task of type Question</returns>
         public async Task<DomainQuestions> GetRandomizedQuestion(string userId)
         {
+            //validate input
+            if(string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException(); 
+            }
+
             //pull question bank size information
             var questionBankSize = await _algoRepo.GetQuestionBankSize();
 
             //validate data from db
             if (questionBankSize <= 0)
             {
-                return null;
+                throw new Exception();
             }
 
             //call user service to pull list of seen questions 
@@ -61,9 +66,9 @@ namespace AlgoMeterApp.Domain.Services
             var seenQuestions = userDetails.QuestionIds;
 
             //return if seen question list == length of question bank size
-            if(seenQuestions.Count == questionBankSize)
+            if(seenQuestions.Count >= questionBankSize)
             {
-                return new DomainQuestions("Reached end of question set");
+                throw new Exception("Reached end of question set");
             }
 
             //pass them into randomize question 
@@ -79,9 +84,19 @@ namespace AlgoMeterApp.Domain.Services
             return domainRandomizedQuestion;
         }
 
-        //Service method to add questions to the database
+        /// <summary>
+        /// Service method to add questions to the database
+        /// </summary>
+        /// <param name="questionList"></param>
+        /// <returns></returns>
         public async Task AddQuestions(List<DomainQuestions> questionList)
         {
+            //validate input
+            if(questionList == null)
+            {
+                throw new ArgumentException();
+            }
+
             //map domain question list to db question list 
             var dbQuestionList = new List<RepoQuestions>();
 

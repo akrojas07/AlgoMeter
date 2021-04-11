@@ -11,6 +11,13 @@ namespace AlgoMeterApp.Domain.Models
         {
             QuestionId = 0;
             Question = question;
+        }        
+        public DomainQuestions(string question, string input, string output)
+        {
+            QuestionId = 0;
+            Question = question;
+            Input = input;
+            Output = output;
         }
         public long QuestionId { get; set; }
         public string Question { get; set; }
