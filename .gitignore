@@ -6,3 +6,13 @@ AlgoMeterApp.Domain/obj/
 AlgoMeterApp.Infrastructure/obj/
 
 .vs/
+
+AlgoMeterApp.API/bin/
+
+AlgoMeterApp.Infrastructure/bin/
+
+AlgoMeterApp.Domain/bin/
+
+AlgoMeterApp.Tests/bin/
+
+AlgoMeterApp.Tests/obj/
